@@ -122,6 +122,9 @@ public class User {
 	}
 
 	private String StringArrayListToString(ArrayList<String> input) {
+		if (input.size() < 1) 
+			return "";
+		
 		String output = input.get(0);
 		for (int i = 1; i < input.size(); i++) {
 			output = output + ";" + input.get(i);
