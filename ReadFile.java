@@ -116,7 +116,9 @@ parameters.
             String[] pices = line.split(",");
             User first = users.get(pices[0]);
             User second = users.get(pices[1]);
-            first.setFriends(second);
+            if (users.containsKey(first) && users.containsKey(second)) {
+                first.setFriends(second);
+            }
         }
     }
 }
