@@ -1,161 +1,166 @@
-package dataStructures;
+package project;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
-    private String groupcode = "G611837";
-    private final String id;
-    private String name, surname, birthplace, home, gender;
-    private ArrayList<String> studiedAt, workplaces, movies = new ArrayList<String>();
-    private Date birthday;
-    private ArrayList<User> friends = new ArrayList<>();
+	private String groupcode = "G611837";
+	private final String id;
+	private String name, surname, birthplace, home, gender;
+	private ArrayList<String> studiedAt, workplaces, movies = new ArrayList<String>();
+	private Date birthday;
+	private ArrayList<Friendship> friends = new ArrayList<>();
 
-    // Constructor
-    /* Minimal constructor ,use not advised */
-    public User(String id) {
-        this.id = id;
-    }
+	// Constructor
+	/* Minimal constructor ,use not advised */
+	public User(String id) {
+		this.id = id;
+	}
 
-    /* Default Groupcode */
-    public User(String id, String name, String surname, Date birthday, String gender, String birthplace, String home,
-                ArrayList<String> studiedAt, ArrayList<String> workplaces, ArrayList<String> movies) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.birthplace = birthplace;
-        this.home = home;
-        this.studiedAt = studiedAt;
-        this.workplaces = workplaces;
-        this.movies = movies;
-    }
+	/* Default Groupcode */
+	public User(String id, String name, String surname, Date birthday, String gender, String birthplace, String home,
+			ArrayList<String> studiedAt, ArrayList<String> workplaces, ArrayList<String> movies) {
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.birthday = birthday;
+		this.gender = gender;
+		this.birthplace = birthplace;
+		this.home = home;
+		this.studiedAt = studiedAt;
+		this.workplaces = workplaces;
+		this.movies = movies;
+	}
 
-    /* Custom Groupcode */
-    public User(String id, String name, String surname, Date birthday, String gender, String birthplace, String home,
-                ArrayList<String> studiedAt, ArrayList<String> workplaces, ArrayList<String> movies, String groupcode) {
-        this(id, name, surname, birthday, gender, birthplace, home, studiedAt, workplaces, movies);
-        this.groupcode = groupcode;
-    }
+	/* Custom Groupcode */
+	public User(String id, String name, String surname, Date birthday, String gender, String birthplace, String home,
+			ArrayList<String> studiedAt, ArrayList<String> workplaces, ArrayList<String> movies, String groupcode) {
+		this(id, name, surname, birthday, gender, birthplace, home, studiedAt, workplaces, movies);
+		this.groupcode = groupcode;
+	}
 
-    // Getters & Setters
+	// Getters & Setters
 
-    public ArrayList<User> getFriends() {
-        return friends;
-    }
+	public String getGroupcode() {
+		return groupcode;
+	}
 
-    public void setFriends(User friend) {
-        this.friends.add(friend);
-    }
+	public void setGroupcode(String groupcode) {
+		this.groupcode = groupcode;
+	}
 
-    public String getGroupcode() {
-        return groupcode;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setGroupcode(String groupcode) {
-        this.groupcode = groupcode;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getSurname() {
+		return surname;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
 
-    public String getSurname() {
-        return surname;
-    }
+	public String getBirthplace() {
+		return birthplace;
+	}
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+	public void setBirthplace(String birthplace) {
+		this.birthplace = birthplace;
+	}
 
-    public String getBirthplace() {
-        return birthplace;
-    }
+	public String getHome() {
+		return home;
+	}
 
-    public void setBirthplace(String birthplace) {
-        this.birthplace = birthplace;
-    }
+	public void setHome(String home) {
+		this.home = home;
+	}
 
-    public String getHome() {
-        return home;
-    }
+	public String getGender() {
+		return gender;
+	}
 
-    public void setHome(String home) {
-        this.home = home;
-    }
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 
-    public String getGender() {
-        return gender;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+	public ArrayList<String> getStudiedAt() {
+		return studiedAt;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public ArrayList<String> getWorkplaces() {
+		return workplaces;
+	}
 
-    public ArrayList<String> getStudiedAt() {
-        return studiedAt;
-    }
+	public Date getBirthday() {
+		return birthday;
+	}
 
-    public ArrayList<String> getWorkplaces() {
-        return workplaces;
-    }
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 
-    public Date getBirthday() {
-        return birthday;
-    }
+	public ArrayList<Friendship> getFriends() {
+		return friends;
+	}
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
+	public ArrayList<String> getMovies() {
+		return movies;
+	}
 
-    // List methods
-    public void addWorkplace(String newWorkplace) {
-        workplaces.add(newWorkplace);
-    }
+	// List methods
+	public void addWorkplace(String newWorkplace) {
+		workplaces.add(newWorkplace);
+	}
 
-    public void addStudyPlace(String newStudyPlace) {
-        studiedAt.add(newStudyPlace);
-    }
+	public void addStudyPlace(String newStudyPlace) {
+		studiedAt.add(newStudyPlace);
+	}
 
-    public void addMovie(String newMovie) {
-        movies.add(newMovie);
-    }
+	public void addMovie(String newMovie) {
+		movies.add(newMovie);
+	}
 
-    private String StringArrayListToString(ArrayList<String> input) {
-        if (input.size() < 1)
-            return "";
+	public void addFriend(Friendship f) {
+		friends.add(f);
+	}
 
-        String output = input.get(0);
-        for (int i = 1; i < input.size(); i++) {
-            output = output + ";" + input.get(i);
-        }
-        return output;
-    }
+	// Utility
+	private String StringArrayListToString(ArrayList<String> input) {
+		if (input.size() < 1)
+			return "";
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "groupcode='" + groupcode + '\'' +
-                ", id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", birthplace='" + birthplace + '\'' +
-                ", home='" + home + '\'' +
-                ", gender='" + gender + '\'' +
-                ", studiedAt=" + studiedAt +
-                ", workplaces=" + workplaces +
-                ", movies=" + movies +
-                ", birthday=" + birthday +
-                ", friends=" + friends +
-                '}';
-    }
+		String output = input.get(0);
+		for (int i = 1; i < input.size(); i++) {
+			output = output + ";" + input.get(i);
+		}
+		return output;
+	}
+
+	// ToString
+	@Override
+	public String toString() {
+		String output = id + ",";
+		output += ((name != null) ? name : "") + ",";
+		output += ((surname != null) ? surname : "") + ",";
+		output += ((birthday != null) ? birthday.toString() : "") + ",";
+		output += ((gender != null) ? gender : "") + ",";
+		output += ((birthplace != null) ? birthplace : "") + ",";
+		output += ((studiedAt != null) ? StringArrayListToString(studiedAt) : "") + ",";
+		output += ((workplaces != null) ? StringArrayListToString(workplaces) : "") + ",";
+		output += ((movies != null) ? StringArrayListToString(movies) : "") + ",";
+		output += groupcode;
+
+		return output;
+	}
+
 }
