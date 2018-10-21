@@ -98,4 +98,21 @@ public class UserMap {
 		return output;
 	}
 
+	public static boolean verifyUser(String id) {
+		return userMap.containsKey(id);
+	}
+
+	public static boolean verifyUser(User u) {
+		return verifyUser(u.getId());
+	}
+
+	public static boolean verifyPair(String id1, String id2) {
+		return verifyUser(id1) && verifyUser(id2);
+	}
+
+	public static boolean verifyPair(User u1, User u2) {
+		return verifyUser(u1) && verifyUser(u2);
+	}
+
+
 }
