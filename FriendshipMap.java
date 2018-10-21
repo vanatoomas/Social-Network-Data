@@ -30,5 +30,10 @@ public class FriendshipMap {
 		u1.addFriend(aux);
 		u2.addFriend(aux);
 	}
-
+	
+	public static void resetReadFlag() {
+		for (Friendship f : friendships.values()) {
+			f.setRead(true);
+		}
+	}
 }
