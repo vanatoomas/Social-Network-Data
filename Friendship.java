@@ -21,4 +21,9 @@ public class Friendship {
 	public void setRead(boolean b) {
 		read = b;
 	}
+	
+	@Override
+	public String toString() {
+		return user1.getId() + user2.getId();
+	}
 }
