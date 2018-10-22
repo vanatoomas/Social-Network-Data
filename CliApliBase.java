@@ -1,5 +1,4 @@
 package project;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -17,13 +16,17 @@ public class CliApliBase {
 	private Command[] functions;
 	private String[] options;
 	private String[] commandNames;
-	private String[] exitKey = { "q", "exit", "quit" };;
-	private boolean finished = false;
 
+	private String[] exitKey = { "q", "exit", "quit" };
+	private String startMessage = "Welcome to this command line interface based application!";
 	private String mainMessage = "Please input the either the option number or the corresponding command.";
 	private String endMessage = "Goodbye!";
+	private int maxOptionLength;
 
-	// Minimal constructor
+	private Command initAction, endAction;
+	private boolean finished = false;
+
+	// Constructor
 	public CliApliBase(String[] commandNames, Command[] functions, String[] options) throws Exception {
 		// Checks for critical arguments' correctness
 		if (functions.length != commandNames.length || functions.length != options.length) {
@@ -36,11 +39,23 @@ public class CliApliBase {
 			commands.put(commandNames[i], functions[i]);
 		}
 		this.options = options;
+		maxOptionLength = findMaxOptionLength();
+	}
+
+	// One liner to handle starting and ending the app, along with a continuous
+	// reading from user
+	public void startReading() {
+		startApp();
+
+		while (!isFinished())
+			readUserInput();
+
+		endApp();
+
 	}
 
 	// Prints options and reads user input
 	public void readUserInput() {
-		// Instantiates Scanner
 		while (true) {
 			// Print
 			printInfo();
@@ -48,12 +63,11 @@ public class CliApliBase {
 			String input = sc.next();
 			boolean isNumber = isNumber(input);
 			if (isExitKey(input)) {
-				System.out.println(endMessage);
 				finished = true;
+				sc.close();
 				break;
 			} else if (handleInputString(input, isNumber))
 				break;
-
 		}
 	}
 
@@ -103,8 +117,32 @@ public class CliApliBase {
 	// Prints to std out the corresponding number and commandName for every option
 	private void printInfo() {
 		System.out.println(mainMessage);
-		for (int i = 0; i < functions.length; i++)
-			System.out.println((i + 1) + "-" + options[i] + "      " + commandNames[i]);
+		for (int i = 0; i < functions.length; i++) {
+			String aux = new String(new char[maxOptionLength - options[i].length()]).replace("\0", " ");
+			System.out.println((i + 1) + "-" + options[i] + aux + commandNames[i]);
+		}
+	}
+
+	// Performs actions to be executed only at the start
+	private void startApp() {
+		System.out.println(startMessage);
+		if (initAction != null)
+			initAction.performAction();
+	}
+
+	// Performs actions to be executed only at the end
+	private void endApp() {
+		System.out.println(endMessage);
+		if (endAction != null)
+			endAction.performAction();
+	}
+
+	// Finds and returns the length of the largest option message
+	private int findMaxOptionLength() {
+		int max = 0;
+		for (String s : options)
+			max = (s.length() > max) ? s.length() : max;
+		return (max > 45) ? max + 5 : 50;
 	}
 
 	// Various Getters & Setters
@@ -120,8 +158,19 @@ public class CliApliBase {
 		this.endMessage = endMessage;
 	}
 
+	public void setStartMessage(String startMessage) {
+		this.startMessage = startMessage;
+	}
+
 	public void setExitKey(String[] exitKey) {
 		this.exitKey = exitKey;
 	}
 
+	public void setInitAction(Command in) {
+		initAction = in;
+	}
+
+	public void setEndAction(Command end) {
+		endAction = end;
+	}
 }
