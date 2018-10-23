@@ -134,8 +134,20 @@ public class User {
 		friends.add(f);
 	}
 
+	public boolean hasWorkplace(String value) {
+		return arrayListContains(workplaces, value);
+	}
+
+	public boolean hasSchool(String value) {
+		return arrayListContains(studiedAt, value);
+	}
+
+	public boolean hasMovie(String value) {
+		return arrayListContains(movies, value);
+	}
+
 	// Utility
-	private String StringArrayListToString(ArrayList<String> input) {
+	private static String StringArrayListToString(ArrayList<String> input) {
 		if (input.size() < 1)
 			return "";
 
@@ -144,6 +156,14 @@ public class User {
 			output = output + ";" + input.get(i);
 		}
 		return output;
+	}
+
+	private static boolean arrayListContains(ArrayList<String> list, String value) {
+		for (String s : list) {
+			if (s.equals(value))
+				return true;
+		}
+		return false;
 	}
 
 	// ToString
@@ -155,6 +175,7 @@ public class User {
 		output += ((birthday != null) ? birthday.toString() : "") + ",";
 		output += ((gender != null) ? gender : "") + ",";
 		output += ((birthplace != null) ? birthplace : "") + ",";
+		output += ((home != null) ? home : "") + ",";
 		output += ((studiedAt != null) ? StringArrayListToString(studiedAt) : "") + ",";
 		output += ((workplaces != null) ? StringArrayListToString(workplaces) : "") + ",";
 		output += ((movies != null) ? StringArrayListToString(movies) : "") + ",";
