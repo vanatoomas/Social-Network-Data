@@ -7,8 +7,12 @@ import java.util.Map;
 import javax.naming.directory.InvalidAttributesException;
 
 public class UserMap {
+	// Main data structure
 	static private Map<String, User> userMap = new HashMap<String, User>();
 
+	/*
+	 * Function to add a single user returns true if it was added successfully
+	 */
 	public static boolean addUser(User u) {
 		if (userMap.containsKey(u.getId()))
 			return false;
@@ -16,12 +20,26 @@ public class UserMap {
 		return true;
 	}
 
-	public void addUsers(ArrayList<User> usersIn) {
+	/*
+	 * Function to add an arraylist of users returns the amount of successful
+	 * additions
+	 */
+	public static int addUsers(ArrayList<User> usersIn) {
+		int count = 0;
 		for (User u : usersIn) {
-			addUser(u);
+			if (addUser(u))
+				count++;
 		}
+		return count;
 	}
 
+	/* Returns the user with the given key */
+	public static User get(String key) {
+		return userMap.get(key);
+	}
+
+	/* Returns an arraylist of users that contain @param value in the given field */
+	// TODO -> Clean it up and fix arraylist fields' inconsistencies
 	public static ArrayList<User> findValue(String field, String value) throws InvalidAttributesException {
 		ArrayList<User> output = new ArrayList<>();
 		switch (field) {
@@ -29,67 +47,65 @@ public class UserMap {
 			output.add(userMap.get(value));
 			break;
 		case "groupcode":
-			userMap.forEach((key, user) -> {
-				if (user.getGroupcode().equals(value))
-					output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.getGroupcode().equals(value))
+					output.add(u);
+			}
 			break;
 		case "name":
-			userMap.forEach((key, user) -> {
-				if (user.getName().equals(value))
-					output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.getName().equals(value))
+					output.add(u);
+			}
 			break;
 		case "surname":
-			userMap.forEach((key, user) -> {
-				if (user.getSurname().equals(value))
-					output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.getSurname().equals(value))
+					output.add(u);
+			}
 			break;
 		case "birthplace":
-			userMap.forEach((key, user) -> {
-				if (user.getBirthplace().equals(value))
-					output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.getBirthplace().equals(value))
+					output.add(u);
+			}
 			break;
 		case "home":
-			userMap.forEach((key, user) -> {
-				if (user.getHome().equals(value))
-					output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.getHome().equals(value))
+					output.add(u);
+			}
 			break;
 		case "gender":
-			userMap.forEach((key, user) -> {
-				if (user.getGender().equals(value))
-					output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.getGender().equals(value))
+					output.add(u);
+			}
 			break;
 		case "birthday":
-			userMap.forEach((key, user) -> {
-				if (user.getBirthday().equals(ReadFile.convertDate(value)))
-					output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.getBirthday().equals(ReadFile.convertDate(value)))
+					output.add(u);
+			}
 			break;
 		case "studiedAt":
-			userMap.forEach((key, user) -> {
-				for (String s : user.getStudiedAt())
-					if (s.equals(value))
-						output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.hasSchool(value))
+					output.add(u);
+			}
 			break;
 		case "workplaces":
-			userMap.forEach((key, user) -> {
-				for (String s : user.getWorkplaces())
-					if (s.equals(value))
-						output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.hasWorkplace(value))
+					output.add(u);
+			}
 			break;
 		case "movies":
-			userMap.forEach((key, user) -> {
-				for (String s : user.getMovies())
-					if (s.equals(value))
-						output.add(user);
-			});
+			for (User u : userMap.values()) {
+				if (u.hasMovie(value)) {
+					output.add(u);
+				}
+			}
 			break;
 		default:
 			throw new NoSuchFieldError("The introduced field doesn't exist.");
@@ -98,6 +114,7 @@ public class UserMap {
 		return output;
 	}
 
+	// Returns true if the user exits
 	public static boolean verifyUser(String id) {
 		return userMap.containsKey(id);
 	}
@@ -106,6 +123,7 @@ public class UserMap {
 		return verifyUser(u.getId());
 	}
 
+	// Returns true if both users exit
 	public static boolean verifyPair(String id1, String id2) {
 		return verifyUser(id1) && verifyUser(id2);
 	}
@@ -114,5 +132,12 @@ public class UserMap {
 		return verifyUser(u1) && verifyUser(u2);
 	}
 
-
+	// Returns an string made from the contents of the userMap formatted
+	public static String print() {
+		String output = "idperson,name,lastname,birthdate,gender,birthplace,home,studiedat,workplaces,films,groupcode";
+		for (User u : userMap.values()) {
+			output += "\n" + u.toString();
+		}
+		return output;
+	}
 }
