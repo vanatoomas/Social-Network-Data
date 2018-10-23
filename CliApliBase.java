@@ -1,23 +1,26 @@
 package project;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class CliApliBase {
+	// Basic Interface
 	public static interface Command {
 		public void performAction();
 	}
 
+	// Others
 	Scanner sc = new Scanner(System.in);
 	private static final Exception InvalidArgumenException = null;
 
 	private Map<String, Command> commands = new HashMap<>();
-
+	// Command functionality
 	private Command[] functions;
 	private String[] options;
 	private String[] commandNames;
-
 	private String[] exitKey = { "q", "exit", "quit" };
+	// Messages & Visualization
 	private String startMessage = "Welcome to this command line interface based application!";
 	private String mainMessage = "Please input the either the option number or the corresponding command.";
 	private String endMessage = "Goodbye!";
