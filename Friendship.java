@@ -1,8 +1,9 @@
 package project;
 
 public class Friendship {
-	project.User user1;
-	private project.User user2;
+	// Models a friendship relationship between two users
+	private User user1;
+	private User user2;
 	private boolean read = false;
 
 	public Friendship(project.User u1, project.User u2) {
@@ -21,9 +22,17 @@ public class Friendship {
 	public void setRead(boolean b) {
 		read = b;
 	}
-	
+
+	public User getFriend1() {
+		return user1;
+	}
+
+	public User getFriend2() {
+		return user2;
+	}
+
 	@Override
 	public String toString() {
-		return user1.getId() + user2.getId();
+		return user1.getId() + "," + user2.getId();
 	}
 }
