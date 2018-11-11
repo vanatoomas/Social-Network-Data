@@ -28,42 +28,49 @@ public class ReadFile {
 			String[] pices = line.split(",");
 			// Check every time if the string is not empty
 			for (int i = 0; i < pices.length; i++) {
-				if (!pices[i].equals("")) {
-					if (i == 0) {
-						id = pices[0];
-					} else if (i == 1) {
-						name = pices[1];
-					} else if (i == 2) {
-						surname = pices[2];
-					} else if (i == 3) {
-						birthday = convertDate(pices[3]);
-					} else if (i == 4) {
-						gender = pices[4];
-					} else if (i == 5) {
-						birthplace = pices[5];
-					} else if (i == 6) {
-						home = pices[6];
-					} else if (i == 7) {
-						String[] studylist = pices[7].split(";");
-						ArrayList<String> studylist1 = new ArrayList<String>(Arrays.asList(studylist));
-						studiedAt = studylist1;
-					} else if (i == 8) {
-						String[] worklist = pices[8].split(";");
-						ArrayList<String> worklist1 = new ArrayList<String>(Arrays.asList(worklist));
-						workplaces = worklist1;
-					} else if (i == 9) {
-						String[] filmlist = pices[9].split(";");
-						ArrayList<String> filmlist1 = new ArrayList<String>(Arrays.asList(filmlist));
-						movies = filmlist1;
-					} else if (i == 10) {
-						groupcode = pices[10];
-					}
+
+				if (i == 0) {
+					id = (!pices[i].equals("")) ? pices[0] : "";
+				} else if (i == 1) {
+					name = (!pices[i].equals("")) ? pices[1] : "";
+				} else if (i == 2) {
+					surname = (!pices[i].equals("")) ? pices[2] : "";
+				} else if (i == 3) {
+					birthday = (!pices[i].equals("")) ? convertDate(pices[3]) : new Date();
+				} else if (i == 4) {
+					gender = (!pices[i].equals("")) ? pices[4] : "";
+				} else if (i == 5) {
+					birthplace = (!pices[i].equals("")) ? pices[5] : "";
+				} else if (i == 6) {
+					home = (!pices[i].equals("")) ? pices[6] : "";
+				} else if (i == 7) {
+					String[] studylist = pices[7].split(";");
+					ArrayList<String> studylist1 = (!pices[i].equals(""))
+							? new ArrayList<String>(Arrays.asList(studylist))
+							: new ArrayList<String>();
+					studiedAt = studylist1;
+				} else if (i == 8) {
+					String[] worklist = pices[8].split(";");
+					ArrayList<String> worklist1 = (!pices[i].equals(""))
+							? new ArrayList<String>(Arrays.asList(worklist))
+							: new ArrayList<String>();
+					workplaces = worklist1;
+				} else if (i == 9) {
+					String[] filmlist = pices[9].split(";");
+					ArrayList<String> filmlist1 = (!pices[i].equals(""))
+							? new ArrayList<String>(Arrays.asList(filmlist))
+							: new ArrayList<String>();
+					movies = filmlist1;
+				} else if (i == 10) {
+					groupcode = pices[10];
 				}
+
 			}
 			User user = (initializeUser(groupcode, id, name, surname, birthplace, home, gender, studiedAt, workplaces,
 					movies, birthday));
 			allUsers.add(user);
 		}
+		br.close();
 		return allUsers;
 	}
 
