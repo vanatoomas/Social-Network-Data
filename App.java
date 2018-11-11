@@ -52,7 +52,7 @@ public class App {
     static Command setWrite = () -> {
 
         System.out.println("Please introduce the desired path to write to.");
-        String newPath = sc.next();
+        String newPath = sc.nextLine();
         if (askYesNo("Is " + newPath + " the path you want to set as the write path?")) {
             outFilePath = newPath;
             System.out.println("Updated file path to write.");
@@ -135,18 +135,74 @@ public class App {
             e.printStackTrace();
         }
     };
+    //Finds all the friends of person/persons
+    static Command friendsOfUser = () -> {
+        System.out.println("Please enter the surname of the user:");
+        String surname = sc.next();
+        ArrayList<User> usersWithSurname= new ArrayList<>();
+        try {
+            usersWithSurname = UserMap.findValue("surname", surname);
+        } catch (InvalidAttributesException e) {
+            e.printStackTrace();
+        }
+        if (!usersWithSurname.isEmpty()){
+            System.out.println("Print results to console (c) or write to file (w)?");
+            String print = sc.next();
+            StringBuilder toFile = new StringBuilder();
+            //if (print.equals("c")){
+                for (User user: usersWithSurname) {
+                    if (print.equals("c")) {
+                        System.out.println("Friends of " + user.getName() + " " + user.getSurname());
+                    }
+                    else if (print.equals("w")){
+                        toFile.append("Friends of " + user.getName() + " " + user.getSurname() + "\n");
+                    }
+                    ArrayList<Friendship> friends = user.getFriends();
+                    for (Friendship friendship: friends) {
+                        if (friendship.getFriend1().getId() == user.getId()) {
+                            if (print.equals("c")){
+                            System.out.println(friendship.getFriend2().getId() + " " + friendship.getFriend2().getSurname());
+                            }
+                            else if (print.equals("w")){
+                                toFile.append(friendship.getFriend2().getId() + " " + friendship.getFriend2().getSurname() + "\n");
+                            }
+                        }
+                        else if (friendship.getFriend2().getId() == user.getId()){
+                            if (print.equals("c")) {
+                                System.out.println(friendship.getFriend1().getId() + " " + friendship.getFriend1().getSurname());
+                            }
+                            else if (print.equals("w")){
+                                toFile.append(friendship.getFriend1().getId() + " " + friendship.getFriend1().getSurname() + "\n");
+                            }
+                        }
+                    }
+                }
+                if (print.equals("w")){
+                    try {
+                        WriteFile.write(outFilePath, toFile.toString());
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            //}
+        }
+        else {
+            System.out.println("No users match.\n");
+        }
+    };
 
     // App configuration variables
     // Names for the accepted commands
     static String[] commandNames = { "readUsers", "readFriends", "saveUsers", "saveFriends", "setRead", "setWrite",
-            "search", "printUsers", "printFriends", "readResidential" };
+            "search", "printUsers", "printFriends", "readResidential", "friendsOfUser" };
     // Test to display to user explaining options
     static String[] options = { "Read users from file", "Read friendship relationships from file",
             "Save users to a file", "Save friendships to a file", "Set read file path", "Set write file path",
-            "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file." };
+            "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file.",
+    "Find friends of the user"};
     // Functions to be called upon command execution
     static Command[] test = { readUsers, readFriendships, saveUsers, saveFriends, setRead, setWrite, search, printUsers,
-            printFriends, readResidential };
+            printFriends, readResidential, friendsOfUser };
     // App instance declaration
     static CliApliBase app;
 
