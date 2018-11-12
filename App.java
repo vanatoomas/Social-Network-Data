@@ -191,18 +191,43 @@ public class App {
         }
     };
 
+    //Splits users into classes based on their favorite movies and creates a list of classes
+    static Command listOfMovieClasses = () -> {
+        ArrayList<User> allUsers = UserMap.allUsers();
+        ArrayList<MovieProfiles> result = new ArrayList<>();
+        for (User u : allUsers){
+            ArrayList<String> movies = u.getMovies();
+            movies.sort(String::compareToIgnoreCase);
+            boolean found = false;
+            for (int i = 0; i < result.size(); i++) {
+                if(movies.equals(result.get(i).getMovies())){
+                    result.get(i).addUsers(u);
+                    found = true;
+                }
+            }
+            if (found == false || result.size() == 0){
+                MovieProfiles profile = new MovieProfiles(movies);
+                profile.addUsers(u);
+                result.add(profile);
+            }
+        }
+        for (MovieProfiles profile: result) {
+            System.out.println(profile.toString());
+        }
+    };
+
     // App configuration variables
     // Names for the accepted commands
     static String[] commandNames = { "readUsers", "readFriends", "saveUsers", "saveFriends", "setRead", "setWrite",
-            "search", "printUsers", "printFriends", "readResidential", "friendsOfUser" };
+            "search", "printUsers", "printFriends", "readResidential", "friendsOfUser", "listOfMovieClasses" };
     // Test to display to user explaining options
     static String[] options = { "Read users from file", "Read friendship relationships from file",
             "Save users to a file", "Save friendships to a file", "Set read file path", "Set write file path",
             "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file.",
-    "Find friends of the user"};
+    "Find friends of the user", "Splits users into classes based on their favorite movies and creates a list"};
     // Functions to be called upon command execution
     static Command[] test = { readUsers, readFriendships, saveUsers, saveFriends, setRead, setWrite, search, printUsers,
-            printFriends, readResidential, friendsOfUser };
+            printFriends, readResidential, friendsOfUser, listOfMovieClasses };
     // App instance declaration
     static CliApliBase app;
 
