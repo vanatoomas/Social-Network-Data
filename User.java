@@ -183,5 +183,24 @@ public class User {
 
 		return output;
 	}
+	
+	public static ArrayList<User> sortArrayListofUser(ArrayList<User> in) {
+		//Sorts an ArrayList of Users using the lexicographic order of the following : birthplace,surname,name
+		Collections.sort(in, new Comparator<User>() {
+			@Override
+			public int compare(User u1, User u2) {
+				if (u1.getBirthplace().compareTo(u2.getBirthplace()) > 0)
+					return 1;
+				else if (u1.getSurname().compareTo(u2.getSurname()) > 0)
+					return 1;
+				else if (u1.getName().compareTo(u2.getName()) > 0)
+					return 1;
+				else
+					return -1;
+			}
+
+		});
+		return in;
+	}
 
 }
