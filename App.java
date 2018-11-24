@@ -1,5 +1,6 @@
 package project;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -101,7 +102,7 @@ public class App {
         String field = sc.next();
         sc.nextLine();
         System.out.println("Please introduce the value you are searching:");
-        String value = sc.next();
+        String value = sc.nextLine().trim();
         sc.nextLine();
         ArrayList<User> results = new ArrayList<>();
         try {
@@ -216,18 +217,56 @@ public class App {
         }
     };
 
+    static Command bornBetween = () -> {
+        System.out.println("Please enter the dates in form: dd-mm-yyyy,dd-mm-yyyy or yyyy,yyyy");
+        String response = sc.next().trim();
+        String[] dates = new String[2];
+        if(response.contains("-") && response.length() == 21){
+            dates = response.split(",");
+           dates[0] =  dates[0].substring(dates[0].length()-4);
+            dates[1] = dates[1].substring(dates[1].length()-4);
+        }
+        else if ( response.length() == 9){
+            dates = response.split(",");
+        }
+        Integer date1 = Integer.parseInt(dates[0]);
+        Integer date2 = Integer.parseInt(dates[1]);
+
+        ArrayList<User> results = new ArrayList<>();
+        for (int i = date1; i < date2; i++) {
+            try {
+                String value = Integer.toString(i);
+                ArrayList<User> resultsMid = new ArrayList<>();
+                resultsMid = UserMap.findValue("birthdayByYear", value);
+                results.addAll(resultsMid);
+            } catch (InvalidAttributesException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!results.isEmpty()) {
+            User.sortArrayListofUser(results);
+            System.out.println("These are the " + results.size() + " that match:");
+            for (User u : results) {
+                if (u != null)
+                    System.out.println(u.toString());
+            }
+            System.out.println("\n");
+        } else
+            System.out.println("No users match.\n");
+    };
+
     // App configuration variables
     // Names for the accepted commands
     static String[] commandNames = { "readUsers", "readFriends", "saveUsers", "saveFriends", "setRead", "setWrite",
-            "search", "printUsers", "printFriends", "readResidential", "friendsOfUser", "listOfMovieClasses" };
+            "search", "printUsers", "printFriends", "readResidential", "friendsOfUser", "listOfMovieClasses","bornBetween" };
     // Test to display to user explaining options
     static String[] options = { "Read users from file", "Read friendship relationships from file",
             "Save users to a file", "Save friendships to a file", "Set read file path", "Set write file path",
             "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file.",
-    "Find friends of the user", "Splits users into classes based on their favorite movies and creates a list"};
+    "Find friends of the user", "Splits users into classes based on their favorite movies and creates a list", "Retrieve the people who were born between dates D1 and D2"};
     // Functions to be called upon command execution
     static Command[] test = { readUsers, readFriendships, saveUsers, saveFriends, setRead, setWrite, search, printUsers,
-            printFriends, readResidential, friendsOfUser, listOfMovieClasses };
+            printFriends, readResidential, friendsOfUser, listOfMovieClasses, bornBetween };
     // App instance declaration
     static CliApliBase app;
 

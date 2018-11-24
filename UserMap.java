@@ -1,8 +1,8 @@
 package project;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -88,6 +88,15 @@ public class UserMap {
                         output.add(u);
                 }
                 break;
+
+            case "birthdayByYear":
+                for(User u : userMap.values()){
+                    Date date = u.getBirthday();
+                    LocalDate dateCompare = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    if(dateCompare.getYear() == Integer.parseInt(value)){
+                        output.add(u);
+                    }
+                }
             case "studiedAt":
                 for (User u : userMap.values()) {
                     if (u.hasSchool(value))
@@ -102,7 +111,7 @@ public class UserMap {
                 break;
             case "movies":
                 for (User u : userMap.values()) {
-                    if (u.hasMovie(value)) {
+                    if (u.hasMovie(value.trim())) {
                         output.add(u);
                     }
                 }
