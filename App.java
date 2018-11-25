@@ -98,7 +98,7 @@ public class App {
     // them to stdout
     static Command search = () -> {
         System.out.println(
-                "Please introduce the name of the field you are searching :\n id, groupcode, name, surname, birthplace, home, gender, birthday, studiedAt, workplaces, movies");
+                "Please introduce the name of the field you are searching :\n id, groupcode, name, surname, birthplace, home, gender, birthday, birthdayByYear, studiedAt, workplaces, movies");
         String field = sc.next();
         sc.nextLine();
         System.out.println("Please introduce the value you are searching:");
