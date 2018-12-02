@@ -38,6 +38,47 @@ public class App {
         }
     }
 
+    //Function that asks for two users until both found.
+    private static User[] askUsers(){
+        User[] users = new User[2];
+        User u1 = null;
+        User u2 = null;
+        String user1 = null;
+        String user2 = null;
+        while (true) {
+            if (u1 == null) {
+                System.out.println("Please enter the id of first user");
+                user1 = sc.next();
+            }
+            if(u2 == null) {
+                System.out.println("Please enter the id of second user");
+                user2 = sc.next();
+            }
+            ArrayList<User> results1 = new ArrayList<>();
+            ArrayList<User> results2 = new ArrayList<>();
+            try {
+                results1 = UserMap.findValue("id", user1);
+                results2 = UserMap.findValue("id", user2);
+
+            } catch (InvalidAttributesException e) {
+                e.printStackTrace();
+            }
+            u1 = results1.get(0);
+            u2 = results2.get(0);
+            if (u1 != null && u2 != null){
+                users[0] = u1;
+                users[1] = u2;
+                return users;
+            }
+            else if (u1 == null){
+                System.out.println("First user not found");
+            }
+            else if(u2 == null){
+                System.out.println("Second user not found");
+            }
+        }
+    }
+
     // Functions called via the cli commands
     // Sets the value of inFilePath
     static Command setRead = () -> {
@@ -151,40 +192,40 @@ public class App {
             String print = sc.next();
             StringBuilder toFile = new StringBuilder();
             //if (print.equals("c")){
-                for (User user: usersWithSurname) {
-                    if (print.equals("c")) {
-                        System.out.println("Friends of " + user.getName() + " " + user.getSurname());
-                    }
-                    else if (print.equals("w")){
-                        toFile.append("Friends of " + user.getName() + " " + user.getSurname() + "\n");
-                    }
-                    ArrayList<Friendship> friends = user.getFriends();
-                    for (Friendship friendship: friends) {
-                        if (friendship.getFriend1().getId() == user.getId()) {
-                            if (print.equals("c")){
+            for (User user: usersWithSurname) {
+                if (print.equals("c")) {
+                    System.out.println("Friends of " + user.getName() + " " + user.getSurname());
+                }
+                else if (print.equals("w")){
+                    toFile.append("Friends of " + user.getName() + " " + user.getSurname() + "\n");
+                }
+                ArrayList<Friendship> friends = user.getFriends();
+                for (Friendship friendship: friends) {
+                    if (friendship.getFriend1().getId() == user.getId()) {
+                        if (print.equals("c")){
                             System.out.println(friendship.getFriend2().getId() + " " + friendship.getFriend2().getSurname());
-                            }
-                            else if (print.equals("w")){
-                                toFile.append(friendship.getFriend2().getId() + " " + friendship.getFriend2().getSurname() + "\n");
-                            }
                         }
-                        else if (friendship.getFriend2().getId() == user.getId()){
-                            if (print.equals("c")) {
-                                System.out.println(friendship.getFriend1().getId() + " " + friendship.getFriend1().getSurname());
-                            }
-                            else if (print.equals("w")){
-                                toFile.append(friendship.getFriend1().getId() + " " + friendship.getFriend1().getSurname() + "\n");
-                            }
+                        else if (print.equals("w")){
+                            toFile.append(friendship.getFriend2().getId() + " " + friendship.getFriend2().getSurname() + "\n");
+                        }
+                    }
+                    else if (friendship.getFriend2().getId() == user.getId()){
+                        if (print.equals("c")) {
+                            System.out.println(friendship.getFriend1().getId() + " " + friendship.getFriend1().getSurname());
+                        }
+                        else if (print.equals("w")){
+                            toFile.append(friendship.getFriend1().getId() + " " + friendship.getFriend1().getSurname() + "\n");
                         }
                     }
                 }
-                if (print.equals("w")){
-                    try {
-                        WriteFile.write(outFilePath, toFile.toString());
-                    } catch (IOException e){
-                        e.printStackTrace();
-                    }
+            }
+            if (print.equals("w")){
+                try {
+                    WriteFile.write(outFilePath, toFile.toString());
+                } catch (IOException e){
+                    e.printStackTrace();
                 }
+            }
             //}
         }
         else {
@@ -223,7 +264,7 @@ public class App {
         String[] dates = new String[2];
         if(response.contains("-") && response.length() == 21){
             dates = response.split(",");
-           dates[0] =  dates[0].substring(dates[0].length()-4);
+            dates[0] =  dates[0].substring(dates[0].length()-4);
             dates[1] = dates[1].substring(dates[1].length()-4);
         }
         else if ( response.length() == 9){
@@ -253,36 +294,67 @@ public class App {
             System.out.println("\n");
         } else
             System.out.println("No users match.\n");
+
     };
 
-    // App configuration variables
-    // Names for the accepted commands
-    static String[] commandNames = { "readUsers", "readFriends", "saveUsers", "saveFriends", "setRead", "setWrite",
-            "search", "printUsers", "printFriends", "readResidential", "friendsOfUser", "listOfMovieClasses","bornBetween" };
-    // Test to display to user explaining options
-    static String[] options = { "Read users from file", "Read friendship relationships from file",
-            "Save users to a file", "Save friendships to a file", "Set read file path", "Set write file path",
-            "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file.",
-    "Find friends of the user", "Splits users into classes based on their favorite movies and creates a list", "Retrieve the people who were born between dates D1 and D2"};
-    // Functions to be called upon command execution
-    static Command[] test = { readUsers, readFriendships, saveUsers, saveFriends, setRead, setWrite, search, printUsers,
-            printFriends, readResidential, friendsOfUser, listOfMovieClasses, bornBetween };
-    // App instance declaration
-    static CliApliBase app;
+    static Command shortestPath = () -> {
+        User[] users = askUsers();
+        if (!users[0].equals(users[1])) {
+            if (shortestChain.BFS(users[0], users[1]) != 0) {
+                System.out.println(shortestChain.BFS(users[0], users[1]));
+            } else {
+                System.out.println("User " + users[0].getId() + " and user " + users[1].getId() + " are not connected.");
 
-    public static void main(String[] args) throws Exception {
-        // Initialize app
-        app = new CliApliBase(commandNames, test, options);
-        // Set setRead to be executed at the start by default
-        app.setInitAction(setRead);
-        // Set the initial message of the aplication
-        app.setStartMessage(
-                "Welcome to the programming project for DSA made by the group G611837. This program emulates a social network.\n"
-                        + "-------------------------------------------------------------------------------------------------------------");
-        // Main loop
-        app.startReading();
+            }
+        }
+        else{
+            System.out.println(0);
+        }
+    };
 
-        sc.close();
-    }
+    static Command longestPath = () -> {
+        User[] users = askUsers();
+        ArrayList<User> visited = new ArrayList<>();
+        int result = longestChain.DFS(users[0], users[1], visited);
+        if ( result != 0) {
+            System.out.println(result);
+        } else if (result == 0 && users[1].equals(users[0])){
+            System.out.println(result);
+        }
+        else{
+            System.out.println("User " + users[0].getId() + " and user " + users[1].getId() + " are not connected.");
+        }
+    };
 
+        // App configuration variables
+        // Names for the accepted commands
+        static String[] commandNames = {"readUsers", "readFriends", "saveUsers", "saveFriends", "setRead", "setWrite",
+                "search", "printUsers", "printFriends", "readResidential", "friendsOfUser", "listOfMovieClasses", "bornBetween",
+                "shortestPath", "longestPath"};
+        // Test to display to user explaining options
+        static String[] options = {"Read users from file", "Read friendship relationships from file",
+                "Save users to a file", "Save friendships to a file", "Set read file path", "Set write file path",
+                "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file.",
+                "Find friends of the user", "Splits users into classes based on their favorite movies and creates a list", "Retrieve the people who were born between dates D1 and D2",
+                "Retrieves the shortest chain relating two people", "Retrieves the longest chain relating two people"};
+        // Functions to be called upon command execution
+        static Command[] test = {readUsers, readFriendships, saveUsers, saveFriends, setRead, setWrite, search, printUsers,
+                printFriends, readResidential, friendsOfUser, listOfMovieClasses, bornBetween, shortestPath, longestPath};
+        // App instance declaration
+        static CliApliBase app;
+
+        public static void main (String[]args) throws Exception {
+            // Initialize app
+            app = new CliApliBase(commandNames, test, options);
+            // Set setRead to be executed at the start by default
+            app.setInitAction(setRead);
+            // Set the initial message of the aplication
+            app.setStartMessage(
+                    "Welcome to the programming project for DSA made by the group G611837. This program emulates a social network.\n"
+                            + "-------------------------------------------------------------------------------------------------------------");
+            // Main loop
+            app.startReading();
+
+            sc.close();
+        }
 }
