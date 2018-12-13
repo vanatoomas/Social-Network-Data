@@ -232,7 +232,6 @@ public class App {
             System.out.println("No users match.\n");
         }
     };
-
     //Splits users into classes based on their favorite movies and creates a list of classes
     static Command listOfMovieClasses = () -> {
         ArrayList<User> allUsers = UserMap.allUsers();
@@ -257,7 +256,7 @@ public class App {
             System.out.println(profile.toString());
         }
     };
-
+    //Retrieve the people who were born between dates D1 and D2
     static Command bornBetween = () -> {
         System.out.println("Please enter the dates in form: dd-mm-yyyy,dd-mm-yyyy or yyyy,yyyy");
         String response = sc.next().trim();
@@ -296,7 +295,7 @@ public class App {
             System.out.println("No users match.\n");
 
     };
-
+    //Finds shortest path between two people
     static Command shortestPath = () -> {
         User[] users = askUsers();
         if (!users[0].equals(users[1])) {
@@ -311,11 +310,10 @@ public class App {
             System.out.println(0);
         }
     };
-
+    //Finds longest path between two people
     static Command longestPath = () -> {
         User[] users = askUsers();
-        ArrayList<User> visited = new ArrayList<>();
-        int result = longestChain.DFS(users[0], users[1], visited);
+        int result = longestChain.findLongest(users[0], users[1]);
         if ( result != 0) {
             System.out.println(result);
         } else if (result == 0 && users[1].equals(users[0])){
