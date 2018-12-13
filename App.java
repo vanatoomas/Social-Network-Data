@@ -3,7 +3,9 @@ package project;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -323,21 +325,33 @@ public class App {
             System.out.println("User " + users[0].getId() + " and user " + users[1].getId() + " are not connected.");
         }
     };
+    //Finds all cliques bigger than 4 people
+    static Command findClique = () -> {
+        Set<Clique> allPossibleCliques = new HashSet<>();
+        ArrayList<User> allUsers = UserMap.allUsers();
+        for (User u:allUsers){
+            ArrayList<Clique> userCliques = findCliques.findCliq(u);
+            allPossibleCliques.addAll(userCliques);
+        }
 
+        for (Clique c:allPossibleCliques){
+            System.out.println(c);
+        }
+    };
         // App configuration variables
         // Names for the accepted commands
         static String[] commandNames = {"readUsers", "readFriends", "saveUsers", "saveFriends", "setRead", "setWrite",
                 "search", "printUsers", "printFriends", "readResidential", "friendsOfUser", "listOfMovieClasses", "bornBetween",
-                "shortestPath", "longestPath"};
+                "shortestPath", "longestPath","findClique"};
         // Test to display to user explaining options
         static String[] options = {"Read users from file", "Read friendship relationships from file",
                 "Save users to a file", "Save friendships to a file", "Set read file path", "Set write file path",
                 "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file.",
                 "Find friends of the user", "Splits users into classes based on their favorite movies and creates a list", "Retrieve the people who were born between dates D1 and D2",
-                "Retrieves the shortest chain relating two people", "Retrieves the longest chain relating two people"};
+                "Retrieves the shortest chain relating two people", "Retrieves the longest chain relating two people", "Finds all cliques of friends bigger than 4 users"};
         // Functions to be called upon command execution
         static Command[] test = {readUsers, readFriendships, saveUsers, saveFriends, setRead, setWrite, search, printUsers,
-                printFriends, readResidential, friendsOfUser, listOfMovieClasses, bornBetween, shortestPath, longestPath};
+                printFriends, readResidential, friendsOfUser, listOfMovieClasses, bornBetween, shortestPath, longestPath, findClique};
         // App instance declaration
         static CliApliBase app;
 

@@ -218,4 +218,18 @@ public class User {
         return in;
     }
 
+    public static ArrayList<User> sortArrayListofUserbyId(ArrayList<User> in) {
+        //Sorts an ArrayList of Users using the lexicographic order of the following : birthplace,surname,name
+        Collections.sort(in, new Comparator<User>() {
+            @Override
+            public int compare(User u1, User u2) {
+                if (u1.getId().compareTo(u2.getId()) > 0)
+                    return 1;
+                else
+                    return -1;
+            }
+        });
+        return in;
+    }
+
 }
