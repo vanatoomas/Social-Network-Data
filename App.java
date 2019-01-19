@@ -18,6 +18,7 @@ public class App {
     static private Scanner sc = new Scanner(System.in);
 
     // Social Network Data Structures & Information
+    static String currentDir;
     static String inFilePath;
     static String outFilePath;
 
@@ -82,6 +83,17 @@ public class App {
     }
 
     // Functions called via the cli commands
+    //Sets current wrking directory
+    static Command setCurrentDir = () -> {
+		System.out.println("Please introduce the desired directory to read from.");
+		String newPath = sc.nextLine();
+		if (askYesNo("Is " + newPath + " the directory you want to set?")) {
+			currentDir = newPath;
+			System.out.println("Updated dir.");
+		} else
+			System.out.println("Dir to read not updated.");
+	};
+    
     // Sets the value of inFilePath
     static Command setRead = () -> {
         System.out.println("Please introduce the desired path to read from.");
@@ -106,7 +118,7 @@ public class App {
     // Reads users from inFilePath
     static Command readUsers = () -> {
         try {
-            System.out.println(UserMap.addUsers(project.ReadFile.readUsers(inFilePath)) + " users added");
+            System.out.println(UserMap.addUsers(project.ReadFile.readUsers(currentDir + inFilePath)) + " users added");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -114,7 +126,7 @@ public class App {
     // Reads friendships from inFilePath
     static Command readFriendships = () -> {
         try {
-            System.out.println(FriendshipMap.addFriendship(ReadFile.readFriends(inFilePath)) + " friendships added");
+            System.out.println(FriendshipMap.addFriendship(ReadFile.readFriends(currentDir + inFilePath)) + " friendships added");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,20 +134,20 @@ public class App {
     // Prints users to outFilePath
     static Command saveUsers = () -> {
         try {
-            WriteFile.write(outFilePath, UserMap.print());
+            WriteFile.write(currentDir + outFilePath, UserMap.print());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Users saved to " + outFilePath + ".");
+        System.out.println("Users saved to " + currentDir + outFilePath + ".");
     };
     // Prints friendships to outFilePath
     static Command saveFriends = () -> {
         try {
-            WriteFile.write(outFilePath, FriendshipMap.print());
+            WriteFile.write(currentDir + outFilePath, FriendshipMap.print());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Friends saved to " + outFilePath + ".");
+        System.out.println("Friends saved to " + currentDir + outFilePath + ".");
     };
     // Searches for users containing a given value in the specified field and prints
     // them to stdout
@@ -174,7 +186,7 @@ public class App {
     //Reads residential file
     static Command readResidential = () -> {
         try {
-            Residential.findPeopleHometown(inFilePath);
+            Residential.findPeopleHometown(currentDir + inFilePath);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -223,7 +235,7 @@ public class App {
             }
             if (print.equals("w")){
                 try {
-                    WriteFile.write(outFilePath, toFile.toString());
+                    WriteFile.write(currentDir + outFilePath, toFile.toString());
                 } catch (IOException e){
                     e.printStackTrace();
                 }
@@ -342,24 +354,24 @@ public class App {
         // Names for the accepted commands
         static String[] commandNames = {"readUsers", "readFriends", "saveUsers", "saveFriends", "setRead", "setWrite",
                 "search", "printUsers", "printFriends", "readResidential", "friendsOfUser", "listOfMovieClasses", "bornBetween",
-                "shortestPath", "longestPath","findClique"};
+                "shortestPath", "longestPath","findClique","setCurrentDir"};
         // Test to display to user explaining options
         static String[] options = {"Read users from file", "Read friendship relationships from file",
                 "Save users to a file", "Save friendships to a file", "Set read file path", "Set write file path",
                 "Search users", "Displays all user data", "Displays all friendship relationships.", "Find all people from the same town as people in the file.",
                 "Find friends of the user", "Splits users into classes based on their favorite movies and creates a list", "Retrieve the people who were born between dates D1 and D2",
-                "Retrieves the shortest chain relating two people", "Retrieves the longest chain relating two people", "Finds all cliques of friends bigger than 4 users"};
+                "Retrieves the shortest chain relating two people", "Retrieves the longest chain relating two people", "Finds all cliques of friends bigger than 4 users","Changes current working directory."};
         // Functions to be called upon command execution
         static Command[] test = {readUsers, readFriendships, saveUsers, saveFriends, setRead, setWrite, search, printUsers,
-                printFriends, readResidential, friendsOfUser, listOfMovieClasses, bornBetween, shortestPath, longestPath, findClique};
+                printFriends, readResidential, friendsOfUser, listOfMovieClasses, bornBetween, shortestPath, longestPath, findClique, setCurrentDir};
         // App instance declaration
         static CliApliBase app;
 
         public static void main (String[]args) throws Exception {
             // Initialize app
             app = new CliApliBase(commandNames, test, options);
-            // Set setRead to be executed at the start by default
-            app.setInitAction(setRead);
+            // Set setCurrentDir to be executed at the start by default
+            app.setInitAction(setCurrentDir);
             // Set the initial message of the aplication
             app.setStartMessage(
                     "Welcome to the programming project for DSA made by the group G611837. This program emulates a social network.\n"
